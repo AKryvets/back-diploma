@@ -7,11 +7,11 @@ export const databaseProviders = [
     useFactory: async (
       configService: ConfigService
     ): Promise<typeof mongoose> => {
-      const host = configService.get<string>("database.host");
-      const port = configService.get<string>("database.port");
-      const name = configService.get<string>("database.name");
+      const connectionString = configService.get<string>(
+        "database.connectionString"
+      );
 
-      return mongoose.connect(`mongodb://${host}:${port}/${name}`, {
+      return mongoose.connect(connectionString, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,

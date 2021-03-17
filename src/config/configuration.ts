@@ -15,8 +15,8 @@ export default () => ({
     process.env.ACCESS_TOKEN_SECRET || "YqBvBZSizLlCtGe_-s1bpUBk",
   accessTokenLife: parseInt(process.env.ACCESS_TOKEN_LIFE, 10) || "86400",
   database: {
-    host: process.env.DB_HOST || "127.0.0.1",
-    port: parseInt(process.env.DB_PORT, 10) || 27017,
-    name: process.env.DB_NAME || "project-db",
+    connectionString:
+      process.env.DB_CONNECTION_STRING ||
+      "mongodb://127.0.0.1:27017/project-db",
   },
 });
