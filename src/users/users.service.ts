@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { UsersRepository } from './database/users.repository';
-import { CreateUserDto } from './dto/create-user.dto';
-import { GetUserDto } from './dto/get-user.dto';
-import { UserUpdateModel } from './types';
-import * as bcrypt from 'bcrypt';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { UsersRepository } from "./database/users.repository";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { GetUserDto } from "./dto/get-user.dto";
+import * as bcrypt from "bcrypt";
+import { UserUpdateModel } from "./validation/update-user.input";
 
 @Injectable()
 export class UsersService {
@@ -22,9 +22,10 @@ export class UsersService {
 
     if (isAlreadyCreated) {
       throw new BadRequestException({
-        message: 'User with this email is already registered',
+        message: "User with this email is already registered",
       });
     }
+
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(password, salt);
 
@@ -36,10 +37,20 @@ export class UsersService {
     const user = await this.usersRepository.findOne(id);
 
     if (!user) {
-      throw new BadRequestException({ message: 'User not found' });
+      throw new BadRequestException({ message: "User not found" });
     }
 
     await this.usersRepository.updateUserByCond({ _id: id }, updateModel);
     return await this.usersRepository.findOne(id);
+  };
+
+  getUserById = async (id: string) => {
+    const user = await this.usersRepository.findOne(id);
+
+    if (!user) {
+      throw new BadRequestException({ message: "User not found" });
+    }
+
+    return user;
   };
 }

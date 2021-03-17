@@ -1,13 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { User, UserUpdateModel } from '../types';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { GetUserDto } from '../dto/get-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { Inject, Injectable } from "@nestjs/common";
+import { Model } from "mongoose";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { GetUserDto } from "../dto/get-user.dto";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { User } from "./users.schema";
+import { UserUpdateModel } from "../validation/update-user.input";
 
 @Injectable()
 export class UsersRepository {
-  constructor(@Inject('USER_MODEL') private userModel: Model<User>) {}
+  constructor(@Inject("USER_MODEL") private userModel: Model<User>) {}
 
   async findOne(_id: string): Promise<GetUserDto> {
     return this.userModel.findOne({ _id }).lean();
@@ -25,7 +26,7 @@ export class UsersRepository {
 
   updateUserByCond = async (
     condition: UpdateUserDto,
-    updateModel: UserUpdateModel,
+    updateModel: UserUpdateModel
   ) => {
     return this.userModel.updateOne(condition, { $set: updateModel });
   };

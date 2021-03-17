@@ -6,29 +6,47 @@ import {
   Body,
   Put,
   Param,
-} from '@nestjs/common';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { UsersService } from './users.service';
-import { JoiValidationPipe } from '../common/pipes/validation.pipe';
-import { UpdateUserSchema } from './validation/update-user.input';
-import { UserUpdateModel, UserUpdateParams } from './types';
+} from "@nestjs/common";
+import { JwtAuthGuard } from "../guards/jwt-auth.guard";
+import { UsersService } from "./users.service";
+import { JoiValidationPipe } from "../common/pipes/validation.pipe";
+import {
+  UpdateUserSchema,
+  UserUpdateModel,
+  UserUpdateParams,
+} from "./validation/update-user.input";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { UserGetParamsDto } from "./validation/get-user.input";
 
-@Controller('user')
+@ApiTags("user")
+@Controller("user")
 export class UserController {
   constructor(private usersService: UsersService) {}
 
+  @ApiOperation({ summary: "Get profile" })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get("profile")
   getProfile(@Request() req) {
     return req.user;
   }
 
+  @ApiOperation({ summary: "Update user by id" })
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @ApiBearerAuth()
+  @Put(":id")
   updateUserById(
     @Param() { id }: UserUpdateParams,
-    @Body(new JoiValidationPipe(UpdateUserSchema)) body: UserUpdateModel,
+    @Body(new JoiValidationPipe(UpdateUserSchema)) body: UserUpdateModel
   ) {
     return this.usersService.updateUserById(id, body);
+  }
+
+  @ApiOperation({ summary: "Get user by id" })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get(":id")
+  getUserById(@Param() { id }: UserGetParamsDto) {
+    return this.usersService.getUserById(id);
   }
 }
