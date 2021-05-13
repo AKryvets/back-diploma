@@ -13,7 +13,7 @@ export default () => ({
   },
   accessTokenSecret:
     process.env.ACCESS_TOKEN_SECRET || "YqBvBZSizLlCtGe_-s1bpUBk",
-  accessTokenLife: parseInt(process.env.ACCESS_TOKEN_LIFE, 10) || "86400",
+  accessTokenLife: parseInt(process.env.ACCESS_TOKEN_LIFE, 10) || "30m",
   database: {
     connectionString:
       process.env.DB_CONNECTION_STRING ||

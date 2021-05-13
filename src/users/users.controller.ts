@@ -42,6 +42,14 @@ export class UserController {
     return this.usersService.updateUserById(id, body);
   }
 
+  @ApiOperation({ summary: "Is user personal data confirmed?" })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get("verification-status")
+  validateUser(@Request() req) {
+    return this.usersService.getVerificationStatus(req.user);
+  }
+
   @ApiOperation({ summary: "Get user by id" })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

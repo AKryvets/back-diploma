@@ -5,6 +5,7 @@ export const UpdateUserSchema = Joi.object().keys({
   nickname: Joi.string(),
   lastName: Joi.string(),
   firstName: Joi.string(),
+  age: Joi.string(),
 });
 
 export class UserUpdateModel {
@@ -16,6 +17,9 @@ export class UserUpdateModel {
 
   @ApiPropertyOptional({ default: "" })
   firstName?: string;
+
+  @ApiPropertyOptional({ default: "" })
+  age?: number;
 }
 
 export class UserUpdateParams {

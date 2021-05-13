@@ -53,4 +53,22 @@ export class UsersService {
 
     return user;
   };
+
+  getVerificationStatus = async (user: GetUserDto) => {
+    return {
+      isPersonalDataFilled: await this.validateUser(user._id)
+    };
+  };
+
+  validateUser = async (id: string) => {
+    const user = await this.usersRepository.findOne(id);
+
+    if (!user) {
+      throw new BadRequestException({ message: "User not found" });
+    }
+
+    const { email, nickname, age, firstName, lastName } = user;
+
+    return Boolean(email && nickname && age && firstName && lastName);
+  };
 }

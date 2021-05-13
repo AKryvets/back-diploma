@@ -14,6 +14,7 @@ export const UsersSchema = new mongoose.Schema({
   nickname: String,
   lastName: String,
   firstName: String,
+  age: Number,
   hash: String,
 });
 
