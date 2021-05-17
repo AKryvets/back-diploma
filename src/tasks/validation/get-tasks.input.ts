@@ -5,6 +5,9 @@ export const GetTasksSchema = Joi.object().keys({
   limit: Joi.number().integer().positive().default(20),
   skip: Joi.number().integer().positive().allow(0).default(0),
   creatorId: Joi.string(),
+  search: Joi.string() || Joi.boolean(),
+  tests: Joi.boolean(),
+  practical: Joi.boolean(),
 });
 
 export class GetTasksDto {
@@ -15,5 +18,14 @@ export class GetTasksDto {
   readonly skip: number;
 
   @ApiPropertyOptional()
-  readonly creatorId: string;
+  readonly creatorId: string | boolean;
+
+  @ApiPropertyOptional()
+  readonly search: string;
+
+  @ApiPropertyOptional()
+  readonly tests: boolean;
+
+  @ApiPropertyOptional()
+  readonly practical: boolean;
 }

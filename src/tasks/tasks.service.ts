@@ -3,6 +3,7 @@ import { TasksRepository } from "./database/tasks.repository";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { Tasks } from "./database/tasks.schema";
 import { GetTasksDto } from "./validation/get-tasks.input";
+import {TaskTypes} from './database/tasks.enums';
 
 @Injectable()
 export class TasksService {
@@ -27,11 +28,18 @@ export class TasksService {
     return this.findOne(id);
   }
 
-  async getTasks(params: GetTasksDto): Promise<Tasks[]> {
-    const { limit, skip, creatorId } = params;
+  async deleteById(id: string): Promise<Tasks> {
+    return await this.tasksRepository.deleteOne(id);
+  }
+
+  async getTasks(params: GetTasksDto, id: string): Promise<Tasks[]> {
+    const { limit, skip, creatorId, search, practical, tests } = params;
     const filters = {};
 
-    if (creatorId) filters["creatorId"] = creatorId;
+    if (creatorId && creatorId !== 'false') filters["creatorId"] = creatorId === 'true'? id : creatorId;
+    if (search) filters["title"] = new RegExp(search, "i");
+    if (tests) filters["type"] = TaskTypes.Test;
+    if (practical) filters["type"] = TaskTypes.Practical;
 
     return await this.tasksRepository.getAll(limit, skip, filters);
   }

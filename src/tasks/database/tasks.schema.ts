@@ -46,3 +46,16 @@ export interface Options extends Document {
   readonly title: string;
   readonly value: string;
 }
+
+
+TasksSchema.virtual('author', {
+  ref: 'Users',
+  localField: 'creatorId',
+  foreignField: '_id',
+  justOne: true
+});
+
+TasksSchema.set('toJSON', {
+  virtuals: true,
+  getters: true,
+});

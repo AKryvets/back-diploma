@@ -6,7 +6,7 @@ import {
   Body,
   Put,
   Param,
-  Get, Query,
+  Get, Query, Delete,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { TasksService } from "./tasks.service";
@@ -63,8 +63,19 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get("")
   getTasks(
+    @Request() req,
     @Query(new JoiValidationPipe(GetTasksSchema)) params: GetTasksDto
   ) {
-    return this.tasksService.getTasks(params);
+    return this.tasksService.getTasks(params, req.user._id);
+  }
+
+  @ApiOperation({ summary: "Delete task" })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Delete(":id")
+  deleteTask(
+    @Param() { id }: GetTaskParams
+  ) {
+    return this.tasksService.deleteById(id);
   }
 }

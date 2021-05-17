@@ -9,7 +9,7 @@ export class TasksRepository {
   constructor(@Inject("TASK_MODEL") private tasksModel: Model<Tasks>) {}
 
   async findOne(_id: string): Promise<Tasks> {
-    return this.tasksModel.findOne({ _id }).lean();
+    return this.tasksModel.findOne({ _id }).populate('author');
   }
 
   async createTask(createTaskModel: CreateTaskDto): Promise<void> {
@@ -23,7 +23,10 @@ export class TasksRepository {
   }
 
   async getAll(limit, skip, filterParams = {}): Promise<Tasks[]> {
-    return this.tasksModel.find(filterParams).skip(skip).limit(limit);
+    return this.tasksModel.find(filterParams).skip(skip).limit(limit).populate('author');
   }
 
+  async deleteOne(_id: string): Promise<Tasks> {
+     return this.tasksModel.findOneAndDelete({_id});
+  }
 }
