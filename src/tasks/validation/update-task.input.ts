@@ -7,14 +7,16 @@ export const UpdateTaskSchema = Joi.object().keys({
   description: Joi.string(),
   creatorId: Joi.string(),
   type: Joi.string(),
+  linkForCheck: Joi.string(),
+  numberOfAttempts: Joi.number(),
+  timeLimit: Joi.number(),
+  showAnswers: Joi.boolean(),
   questions: Joi.array().items({
     title:  Joi.string(),
     order:  Joi.number(),
     type:  Joi.string(),
-    options: Joi.array().items({
-      title: Joi.string(),
-      value: Joi.string(),
-    })
+    answers: Joi.array(),
+    options: Joi.array(),
   }),
 });
 
@@ -33,6 +35,18 @@ export class UpdateTaskModel {
 
   @ApiPropertyOptional({ default: "" })
   questions?: Questions[];
+
+  @ApiPropertyOptional({ default: "" })
+  linkForCheck?: string;
+
+  @ApiPropertyOptional({ default: "" })
+  numberOfAttempts?: number;
+
+  @ApiPropertyOptional({ default: "" })
+  timeLimit?: number;
+
+  @ApiPropertyOptional({ default: "" })
+  showAnswers?: boolean;
 }
 
 export class UpdateTaskParams {
